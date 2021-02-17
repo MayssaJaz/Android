@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+
+import './result.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,25 +17,50 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _index = 0;
-  void _answerQuestion() {
+  var _totalScore = 0;
+  void _resetQuiz() {
+    setState(() {
+      _index = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score) {
+    print(_totalScore);
+    _totalScore += score;
     setState(() {
       _index++;
     });
     print(_index);
   }
 
-  static const questions = const [
+  final _questions = const [
     {
       'questionText': "Whats ur favourite color?",
-      'Answer': ['Black', 'Red', 'Green', 'White']
+      'Answer': [
+        {'text': 'Black', 'score': 10},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Green', 'score': 3},
+        {'text': 'White', 'score': 1},
+      ]
     },
     {
       'questionText': "Whats ur favourite animal?",
-      'Answer': ['Rabbit', 'Snake', 'Goat', 'Cat']
+      'Answer': [
+        {'text': 'Rabbit', 'score': 10},
+        {'text': 'Sbake', 'score': 5},
+        {'text': 'Goat', 'score': 3},
+        {'text': 'Cat', 'score': 1},
+      ]
     },
     {
       'questionText': "Whats ur favourite instructor?",
-      'Answer': ['Missa', 'Mayssa', 'Momo', 'MMM']
+      'Answer': [
+        {'text': 'Missa', 'score': 10},
+        {'text': 'Mayssa', 'score': 5},
+        {'text': 'May', 'score': 3},
+        {'text': 'MM', 'score': 1},
+      ]
     },
   ];
   @override
@@ -44,13 +70,12 @@ class _MyAppState extends State<MyApp> {
             appBar: AppBar(
               title: Text('Questions'),
             ),
-            body: Column(
-              children: [
-                Question(questions[_index]['questionText']),
-                ...(questions[_index]['Answer'] as List<String>).map((answer) {
-                  return Answer(_answerQuestion, answer);
-                }).toList()
-              ],
-            )));
+            body: _index < _questions.length
+                ? Quiz(
+                    answerQuestion: _answerQuestion,
+                    questions: _questions,
+                    index: _index,
+                  )
+                : Result(_totalScore, _resetQuiz)));
   }
 }
