@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
     print(_index);
   }
 
-  var questions = [
+  static const questions = const [
     {
       'questionText': "Whats ur favourite color?",
       'Answer': ['Black', 'Red', 'Green', 'White']
@@ -47,9 +47,9 @@ class _MyAppState extends State<MyApp> {
             body: Column(
               children: [
                 Question(questions[_index]['questionText']),
-                (questions[_index]['answers'] as List<String>).map((answer) {
-                  return Answer(answer);
-                }),
+                ...(questions[_index]['Answer'] as List<String>).map((answer) {
+                  return Answer(_answerQuestion, answer);
+                }).toList()
               ],
             )));
   }
